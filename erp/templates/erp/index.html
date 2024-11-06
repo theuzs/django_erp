@@ -1,100 +1,84 @@
-<!-- Estendemos do template base -->
-{% extends "erp/_layouts/base.html" %}
+<!DOCTYPE html>
+<html>
+{% load static tempo_atual %}
 
-<!-- Bloco que define o <title></title> da nossa página -->
-{% block title %}Página Inicial{% endblock %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-<!-- Bloco de conteúdo da nossa página -->
-{% block conteudo %}
-    <div class="container mt-5">
-        <div class="row mb-5">
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div class="card border-dark">
-                    <div class="card-header">Funcionários</div>
-                    <div class="card-body">
-                        <p class="card-text">
-                            Mantenha os <code>Funcionários</code> da empresa.
-                        </p>
-                    </div>
-                    <div class="card-footer text-end">
-                        <a href="{% url 'erp:cadastra_funcionario' %}"
-                           class="btn btn-primary btn-sm">
-                            Cadastrar
-                        </a>
-                        <a href="{% url 'erp:lista_funcionarios' %}"
-                           class="btn btn-primary btn-sm">
-                            Lista
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div class="card border-dark">
-                    <div class="card-header">Produtos</div>
-                    <div class="card-body">
-                        <p class="card-text">
-                            Mantenha os <code>Produtos</code> da empresa.
-                        </p>
-                    </div>
-                    <div class="card-footer text-end">
-                        <a href="{% url 'erp:cadastra_produto' %}"
-                           class="btn btn-primary btn-sm">
-                            Cadastrar
-                        </a>
-                        <a href="{% url 'erp:lista_produtos' %}"
-                           class="btn btn-primary btn-sm">
-                            Lista
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <!-- Title -->
+    <title>{% block title %}Sistema de Gerenciamento de Recursos{% endblock %}</title>
 
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div class="card border-dark">
-                    <div class="card-header">Vendas</div>
-                    <div class="card-body">
-                        <p class="card-text">
-                            Mantenha as <code>Vendas</code> da empresa.
-                        </p>
-                    </div>
-                    <div class="card-footer text-end">
-                        <a href="{% url 'erp:cadastra_venda' %}" class="btn btn-primary btn-sm">
-                            Registrar
-                        </a>
-                        <a href="{% url 'erp:lista_vendas' %}" class="btn btn-primary btn-sm">
-                            Lista
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'erp/img/favicon.png' %}" type="image/png">
+
+    <!-- Arquivos CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'erp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'erp/css/master.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'erp/css/aos.css' %}">
+
+    {% block styles %}{% endblock %} 
+</head>
+
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="https://github.com/theuzs">
+            <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" height="45px" alt="GitHub Icon">
+        </a>
+        <a href="https://www.flaticon.com/free-icons/github" title="github icons"></a>
+        
+        
+        <button class="navbar-toggler" type="button"
+                data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'erp:index' %}">Página Inicial</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'erp:lista_funcionarios' %}">Funcionários</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'erp:lista_produtos' %}">Produtos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'erp:lista_vendas' %}">Vendas</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav float-right">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><b>Hora: </b>{% tempo_atual %}</a>
+                </li>
+            </ul>
         </div>
-
-        {% if vendas|length > 0 %}
-            <div class="card border-secondary">
-                <div class="card-header">Vendas</div>
-                <div class="card-body text-secondary">
-                    <p class="card-text">Aqui está a lista de <code>Vendas</code> registradas.</p>
-
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th class="text-center">Funcionário</th>
-                            <th class="text-center">Quantidade de Vendas</th>
-                            <th class="text-center">Total em Vendas</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for venda in vendas_funcionario %}
-                            <tr>
-                                <td class="text-center">{{ venda.funcionario__nome }}</td>
-                                <td class="text-center">{{ venda.numero_vendas }}</td>
-                                <td class="text-center">R$ {{ venda.total_vendas|floatformat:2 }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        {% endif %}
     </div>
-{% endblock %}
+</nav>
+
+<div data-aos="fade-in" data-aos-duration="1000">
+    <!-- Conteúdo do site -->
+    {% block conteudo %}{% endblock %}
+</div>
+
+<!-- Scripts .js -->
+<script src="{% static 'erp/js/jquery.min.js' %}"></script>
+<script src="{% static 'erp/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'erp/js/aos.js' %}"></script>
+
+{% block scripts %}{% endblock %}
+
+<script src="{% static 'erp/js/scripts.js' %}"></script>
+
+<script type="application/javascript">
+    AOS.init();
+</script>
+</body>
+</html>
